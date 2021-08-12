@@ -1,5 +1,5 @@
 {
-    "name": "turtle-pool",
+    "name": "MONCoin-Mining-Pool",
     "version": "0.0.18",
     "license": "GPL-2.0",
     "authors": "Matthew Little",
@@ -8,7 +8,7 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/turtlecoin/turtle-pool"
+        "url": "https://github.com/Kulteam/MONCoin-Mining-Pool/"
     },
     "scripts": {
         "test": "npm install && node tests/dependencyTests.js"
