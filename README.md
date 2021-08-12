@@ -279,7 +279,7 @@ Explanation for each field:
   "wallet": {
     "host": "127.0.0.1",
     "port": 8070,
-    "password": "you_wallet _password"
+    "password": "you_mon_service_rpc_password"
   },
   "redis": {
     "host": "127.0.0.1",
