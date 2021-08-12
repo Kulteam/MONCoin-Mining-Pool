@@ -1,13 +1,5 @@
-![image](https://user-images.githubusercontent.com/34389545/35821974-62e0e25c-0a70-11e8-87dd-2cfffeb6ed47.png)
 
-#### Master Build Status
-[![Build Status](https://travis-ci.org/turtlecoin/node-turtle-pool.svg?branch=master)](https://travis-ci.org/turtlecoin/node-turtle-pool)
-
-#### Development Build Status
-[![Build Status](https://travis-ci.org/turtlecoin/node-turtle-pool.svg?branch=development)](https://travis-ci.org/turtlecoin/node-turtle-pool)
-
-
-turtle-pool (for NodeJS LTS)
+MONCoin Mining Pool (for NodeJS LTS)
 ====================
 Formerly known as cryptonote-forknote-pool, forked from Forknote Project.
 
@@ -73,7 +65,7 @@ Comes with lightweight example front-end script which uses the pool's AJAX API.
 * Historic charts of users's hashrate and payments
 * Miner login(wallet address) validation
 * Five configurable CSS themes
-* Universal blocks and transactions explorer based on [chainradar.com](http://chainradar.com)
+* Universal blocks and transactions explorer based on [exp.moncoin.io](https://exp.moncoin.io/)
 * FantomCoin & MonetaVerde support
 * Set fixed difficulty on miner client by passing "address" param with ".[difficulty]" postfix
 * Prevent "transaction is too big" error with "payments.maxTransactionAmount" option
@@ -85,7 +77,7 @@ Comes with lightweight example front-end script which uses the pool's AJAX API.
 * [CryptoNote Forum](https://forum.cryptonote.org/)
 * [CryptoNote Universal Pool Forum](https://bitcointalk.org/index.php?topic=705509)
 * [Forknote](https://forknote.net)
-* [TurtleCoin](http://chat.turtlecoin.lol)
+* [MỌNCoin](http://chat.moncoin.io)
 
 #### Pools Using This Software
 
@@ -96,8 +88,8 @@ Usage
 ===
 
 #### Requirements
-* Turtlecoind daemon
-* turtle-service
+* MONcoind daemon
+* mon-service
 * [Node.js](http://nodejs.org/) LTS (6,8,10) ([follow these installation instructions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions))
 * [Redis](http://redis.io/) key-value store v2.6+ ([follow these instructions](http://redis.io/topics/quickstart))
 * libssl required for the node-multi-hashing module
@@ -132,30 +124,30 @@ These are the steps taken to install pool on Debian 9.  These steps will also wo
 ```bash
 sudo apt-get install -y git curl wget screen build-essential redis-server libboost-all-dev cmake libssl-dev node-gyp
 ```
-I have currently tested this on Node 8.11.1 and 8.12.0.
+I have currently tested this on Node 10.24.1.
 
 You can install node here: (https://nodejs.org/en/download/package-manager/)
 
 Or directly from a terminal:
 
 ```bash
-curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 sudo apt-get install -y nodejs
 ```
 
 I have found using a screen session to keep everything running on the server works well.
 
-Grab your most recent TurtleCoin release (https://github.com/turtlecoin/turtlecoin/releases/) then launch your daemon and sync your chain.
+Grab your most recent MONCoin release (https://github.com/Kulteam/MONCoin/releases/) then launch your daemon and sync your chain.
 
-Once your daemon is synced with the network start your turtle-service and redis-server.
+Once your daemon is synced with the network start your mon-service and redis-server.
 
 #### 1) Downloading & Installing
 
 Clone the repository and run `npm install` for all the dependencies to be installed:
 
 ```bash
-git clone https://github.com/turtlecoin/turtle-pool turtle-pool
-cd turtle-pool
+git clone https://github.com/Kulteam/MONCoin-Mining-Pool.git
+cd MONCoin-Mining-Pool
 npm install && npm test
 ```
 
@@ -164,248 +156,192 @@ npm install && npm test
 
 Explanation for each field:
 ```javascript
-/* Used for storage in redis so multiple coins can share the same redis instance. */
-"coin": "dashcoin",
-
-/* Used for front-end display */
-"symbol": "DSH",
-
-/* Minimum units in a single coin, see COIN constant in DAEMON_CODE/src/cryptonote_config.h */
-"coinUnits": 1000000000000,
-
-/* Coin network time to mine one block, see DIFFICULTY_TARGET constant in DAEMON_CODE/src/cryptonote_config.h */
-"coinDifficultyTarget": 120,
-
-"logging": {
-
+{
+  "coin": "MONCoin",
+  "symbol": "MON",
+  "coinUnits": 100000000000000000,
+  "coinDifficultyTarget": 30,
+  "logging": {
     "files": {
-
-        /* Specifies the level of log output verbosity. This level and anything
-           more severe will be logged. Options are: info, warn, or error. */
-        "level": "info",
-
-        /* Directory where to write log files. */
-        "directory": "logs",
-
-        /* How often (in seconds) to append/flush data to the log files. */
-        "flushInterval": 5
+      "level": "info",
+      "directory": "logs",
+      "flushInterval": 5
     },
-
     "console": {
-        "level": "info",
-        /* Gives console output useful colors. If you direct that output to a log file
-           then disable this feature to avoid nasty characters in the file. */
-        "colors": true
+      "level": "info",
+      "colors": true
     }
-},
-
-/* Modular Pool Server */
-"poolServer": {
+  },
+  "poolServer": {
     "enabled": true,
-
-    /* Set to "auto" by default which will spawn one process/fork/worker for each CPU
-       core in your system. Each of these workers will run a separate instance of your
-       pool(s), and the kernel will load balance miners using these forks. Optionally,
-       the 'forks' field can be a number for how many forks will be spawned. */
     "clusterForks": "auto",
-
-    /* Address where block rewards go, and miner payments come from. */
-    "poolAddress": "D6WLtrV1SBWV8HWQzQv8uuYuGy3uwZ8ah5iT5HovSqhTKMauquoTsKP8RBJzVqVesX87poYWQgkGWB4NWHJ6Ravv93v4BaE"
-
-    /* Poll RPC daemons for new blocks every this many milliseconds. */
+    "poolAddress": "NgantdAbQwAVkS5jWXb2zkMKCSe1dyQL5PcV4zDqR4ybb9HJLgTDvfADGKzVspmf8MNmdYHxeaw6kCBvSEUV7y56ZPUnUeVCA51",
     "blockRefreshInterval": 1000,
-
-    /* How many seconds until we consider a miner disconnected. */
-    "minerTimeout": 900,
-
+    "minerTimeout": 3600,
     "ports": [
-        {
-            "port": 3333, //Port for mining apps to connect to
-            "difficulty": 100, //Initial difficulty miners are set to
-            "desc": "Low end hardware" //Description of port
-        },
-        {
-            "port": 5555,
-            "difficulty": 2000,
-            "desc": "Mid range hardware"
-        },
-        {
-            "port": 7777,
-            "difficulty": 10000,
-            "desc": "High end hardware"
-        }
+      {
+        "port": 3333,
+        "difficulty": 1000,
+        "desc": "Low end hardware"
+      },
+      {
+        "port": 5555,
+        "difficulty": 10000,
+        "desc": "Mid range hardware"
+      },
+      {
+        "port": 7777,
+        "difficulty": 50000,
+        "desc": "High end hardware"
+      },
+      {
+        "port": 8888,
+        "difficulty": 90000,
+        "desc": "Hidden port",
+        "hidden": true
+      }
     ],
-
-    /* Variable difficulty is a feature that will automatically adjust difficulty for
-       individual miners based on their hashrate in order to lower networking and CPU
-       overhead. */
     "varDiff": {
-        "minDiff": 2, //Minimum difficulty
-        "maxDiff": 100000,
-        "targetTime": 100, //Try to get 1 share per this many seconds
-        "retargetTime": 30, //Check to see if we should retarget every this many seconds
-        "variancePercent": 30, //Allow time to very this % from target without retargeting
-        "maxJump": 100 //Limit diff percent increase/decrease in a single retargeting
+      "minDiff": 100,
+      "maxDiff": 500000,
+      "targetTime": 10,
+      "retargetTime": 30,
+      "variancePercent": 30,
+      "maxJump": 100
     },
-
-    /* Set difficulty on miner client side by passing <address> param with .<difficulty> postfix
-       minerd -u D3z2DDWygoZU4NniCNa4oMjjKi45dC2KHUWUyD1RZ1pfgnRgcHdfLVQgh5gmRv4jwEjCX5LoLERAf5PbjLS43Rkd8vFUM1m.5000 */
     "fixedDiff": {
-        "enabled": true,
-        "separator": ".", // character separator between <address> and <difficulty>
+      "enabled": true,
+      "addressSeparator": "."
     },
-
-    /* Feature to trust share difficulties from miners which can
-       significantly reduce CPU load. */
     "shareTrust": {
-      "enabled": false, //enable or disable the shareTrust system. shareTrust can offer significant CPU workload reduction, however does present a risk of being exploited by miners gaming the percentages of the system.
-      "maxTrustPercent": 50, //The maximum percent chance a share will be considered trusted (not fully validated) 50 means 1 of 2 shares are fully validated at random, 75 means 1 of 4 are fully validated (or 3 of 4 are trusted).
-      "probabilityStepPercent": 1, //The percent the probabality of a share is trusted increases from 0 to maxTrustPercent at a maximum rate of once per probabilityStepWindow seconds in steps of probabilityStepPercent and only on share submission.
-      "probabilityStepWindow": 30, //The probability (chance a share is considered trusted) will increase from 0 to maxTrustPercent by steps of probabilityStepPercent at a maximum rate of once every probabilityStepWindow seconds.
-      "minUntrustedShares": 50, //The minimum amount of shares that will be fully validated before shareTrust will begin.
-      "minUntrustedSeconds": 300, //The minimum amount of time in seconds shares will be fully validated before shareTrust will begin.
-      "maxTrustedDifficulty": 100000, //Shares above this difficulty will be fully validated (not trusted).
-      "maxPenaltyMultiplier": 100, //The maximum penalty multiplied against minUntrustedShares and minUntrustedSeconds.
-      "minPenaltyMultiplier": 2, //The minimum penalty multiplied against minUntrustedShares and minUntrustedSeconds.
-      "penaltyMultiplierStep": 1, //The penalty is multiplied against minUntrustedShares and minUntrustedSeconds. The penalty Steps up/down penaltyMultiplierStep a maximum of once per every penaltyStepUpWindow or penaltyStepDownWindow and only on share submission.
-      "penaltyStepUpWindow": 30, //The penalty steps up a maximum of penaltyMultiplierStep every penaltyStepUpWindow seconds and only on share submission.
-      "penaltyStepDownWindow": 120, //The penalty steps down a maximum of penaltyMultiplierStep every penaltyStepDownWindow seconds and only on share submission.
-      "maxShareWindow": 300, //Must Submit within this window or minUntrustedSeconds, minUntrustedShares and Probability are reset.
-      "maxIPCRate": 15, //The minimum amount of seconds between sharing a miners shareTrust data between pool threads.
-      "maxAge": 604800 //Maximum seconds to retain dissconnected miner shareTrust data in memory.
+      "enabled": true,
+      "maxTrustPercent": 50,
+      "probabilityStepPercent": 1,
+      "probabilityStepWindow": 15,
+      "minUntrustedShares": 50,
+      "minUntrustedSeconds": 300,
+      "maxTrustedDifficulty": 100000,
+      "maxPenaltyMultiplier": 100,
+      "minPenaltyMultiplier": 2,
+      "penaltyMultiplierStep": 1,
+      "penaltyStepUpWindow": 30,
+      "penaltyStepDownWindow": 120,
+      "maxShareWindow": 300,
+      "maxIPCRate": 15,
+      "maxAge": 604800
     },
-
-    /* If under low-diff share attack we can ban their IP to reduce system/network load. */
     "banning": {
-        "enabled": true,
-        "time": 600, //How many seconds to ban worker for
-        "invalidPercent": 25, //What percent of invalid shares triggers ban
-        "checkThreshold": 30 //Perform check when this many shares have been submitted
+      "enabled": false,
+      "time": 600,
+      "invalidPercent": 25,
+      "checkThreshold": 30
     },
-    /* Slush Mining is a reward calculation technique which disincentivizes pool hopping and rewards users to mine with the pool steadily: Values of each share decrease in time – younger shares are valued higher than older shares.
-    More about it here: https://mining.bitcoin.cz/help/#!/manual/rewards */
-    /* There is some bugs with enabled slushMining. Use with '"enabled": false' only. */
-
     "slushMining": {
-        "enabled": false, // 'true' enables slush mining. Recommended for pools catering to professional miners
-        "weight": 120, //defines how fast value assigned to a share declines in time
-        "lastBlockCheckRate": 1 //How often the pool checks for the timestamp of the last block. Lower numbers increase load for the Redis db, but make the share value more precise.
+      "enabled": false,
+      "weight": 120,
+      "lastBlockCheckRate": 1
     }
-},
-
-/* Module that sends payments to miners according to their submitted shares. */
-"payments": {
+  },
+  "payments": {
     "enabled": true,
-    "interval": 600, //how often to run in seconds
-    "maxAddresses": 50, //split up payments if sending to more than this many addresses
-    "transferFee": 5000000000, //fee to pay for each transaction
-    "minPayment": 100000000000, //miner balance required before sending payment
-    "maxTransactionAmount": 0, //split transactions by this amount(to prevent "too big transaction" error)
-    "denomination": 100000000000 //truncate to this precision and store remainder
-},
-
-/* Module that monitors the submitted block maturities and manages rounds. Confirmed
-   blocks mark the end of a round where workers' balances are increased in proportion
-   to their shares. */
-"blockUnlocker": {
+    "allowPaymentId": true,
+    "interval": 120,
+    "maxAddresses": 250,
+    "transferFee": 100,
+    "minPayment": 1000,
+    "minPaymentIdPayment": 1000,
+    "maxTransactionAmount": 0,
+    "denomination": 100
+  },
+  "blockUnlocker": {
     "enabled": true,
-    "interval": 30, //how often to check block statuses in seconds
-
-    /* Block depth required for a block to unlocked/mature. Found in daemon source as
-       the variable CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW */
-    "depth": 60,
-    "poolFee": 1.8, //1.8% pool fee (2% total fee total including donations)
-    "devDonation": 0.1, //0.1% donation to send to pool dev - only works with Monero
-    "coreDevDonation": 0.1 //0.1% donation to send to core devs - works with Bytecoin, Monero, Dashcoin, QuarazCoin, Fantoncoin, AEON and OneEvilCoin
-},
-
-/* AJAX API used for front-end website. */
-"api": {
+    "interval": 30,
+    "depth": 40,
+    "poolFee": 2,
+    "devDonation": 0.1,
+    "coreDevDonation": 0.1,
+    "extraFeaturesDevDonation": 0.1
+  },
+  "api": {
     "enabled": true,
-    "hashrateWindow": 600, //how many second worth of shares used to estimate hash rate
-    "updateInterval": 3, //gather stats and broadcast every this many seconds
-    "host": "127.0.0.1", //if api module is running on a different host (i.e, containerized),
+    "hashrateWindow": 600,
+    "updateInterval": 5,
+    "host": "149.28.20.224",
     "port": 8117,
-    "blocks": 30, //amount of blocks to send at a time
-    "payments": 30, //amount of payments to send at a time
-    "password": "test" //password required for admin stats
-},
-
-/* Coin daemon connection details. */
-"daemon": {
+    "blocks": 30,
+    "payments": 30,
+    "password": "test"
+  },
+  "daemon": {
+    "host": "node-asian.moncoin.io",
+    "port": 80
+  },
+  "wallet": {
     "host": "127.0.0.1",
-    "port": 29081
-},
-
-/* Wallet daemon connection details. */
-"wallet": {
-    "host": "127.0.0.1",
-    "port": 29082,
-    "password": "<replace with rpc password>"
-},
-
-/* Redis connection into. */
-"redis": {
+    "port": 8070,
+    "password": "you_wallet _password"
+  },
+  "redis": {
     "host": "127.0.0.1",
     "port": 6379
-}
-
-/* Monitoring RPC services. Statistics will be displayed in Admin panel */
-"monitoring": {
+  },
+  "monitoring": {
     "daemon": {
-        "checkInterval": 60, //interval of sending rpcMethod request
-        "rpcMethod": "getblockcount" //RPC method name
+      "checkInterval": 60,
+      "rpcMethod": "getblockcount"
     },
     "wallet": {
-        "checkInterval": 60,
-        "rpcMethod": "get_address_count"
+      "checkInterval": 60,
+      "rpcMethod": "getBalance"
     }
-
-/* Collect pool statistics to display in frontend charts  */
-"charts": {
+  },
+  "charts": {
     "pool": {
-        "hashrate": {
-            "enabled": true, //enable data collection and chart displaying in frontend
-            "updateInterval": 60, //how often to get current value
-            "stepInterval": 1800, //chart step interval calculated as average of all updated values
-            "maximumPeriod": 86400 //chart maximum periods (chart points number = maximumPeriod / stepInterval = 48)
-        },
-        "workers": {
-            "enabled": true,
-            "updateInterval": 60,
-            "stepInterval": 1800, //chart step interval calculated as maximum of all updated values
-            "maximumPeriod": 86400
-        },
-        "difficulty": {
-            "enabled": true,
-            "updateInterval": 1800,
-            "stepInterval": 10800,
-            "maximumPeriod": 604800
-        },
-        "price": { //USD price of one currency coin received from cryptonator.com/api
-            "enabled": true,
-            "updateInterval": 1800,
-            "stepInterval": 10800,
-            "maximumPeriod": 604800
-        },
-        "profit": { //Reward * Rate / Difficulty
-            "enabled": true,
-            "updateInterval": 1800,
-            "stepInterval": 10800,
-            "maximumPeriod": 604800
-        }
+      "hashrate": {
+        "enabled": true,
+        "updateInterval": 60,
+        "stepInterval": 1800,
+        "maximumPeriod": 86400
+      },
+      "workers": {
+        "enabled": true,
+        "updateInterval": 60,
+        "stepInterval": 1800,
+        "maximumPeriod": 86400
+      },
+      "difficulty": {
+        "enabled": true,
+        "updateInterval": 1800,
+        "stepInterval": 10800,
+        "maximumPeriod": 604800
+      },
+      "price": {
+        "enabled": false,
+        "updateInterval": 1800,
+        "stepInterval": 10800,
+        "maximumPeriod": 604800
+      },
+      "profit": {
+        "enabled": true,
+        "updateInterval": 1800,
+        "stepInterval": 10800,
+        "maximumPeriod": 604800
+      }
     },
-    "user": { //chart data displayed in user stats block
-        "hashrate": {
-            "enabled": true,
-            "updateInterval": 180,
-            "stepInterval": 1800,
-            "maximumPeriod": 86400
-        },
-        "payments": { //payment chart uses all user payments data stored in DB
-            "enabled": true
-        }
+    "user": {
+      "hashrate": {
+        "enabled": true,
+        "updateInterval": 180,
+        "stepInterval": 1800,
+        "maximumPeriod": 86400
+      },
+      "payments": {
+        "enabled": true
+      }
     }
+  }
+}
+
 ```
 
 #### 3) [Optional] Configure cryptonote-easy-miner for your pool
@@ -564,9 +500,9 @@ var api_blockexplorer = "http://daemonhost.com:1118";
 * Finally, edit these variables in the pool's frontend config.js using this syntax:
 
 ```
-var blockchainExplorer = 'http://poolhost/?hash={id}#blockchain_block'
+var blockchainExplorer = 'https://exp.moncoin.io/block.html?hash={id}'
 
-var transactionExplorer = 'http://poolhost/?hash={id}#blockchain_transaction'
+var transactionExplorer = 'https://exp.moncoin.io/transaction.html?hash={id}'
 ```
 
 Credits
@@ -578,7 +514,7 @@ Credits
 * [Wolf0](https://bitcointalk.org/index.php?action=profile;u=80740) - Helped try to deobfuscate some of the daemon code for getting a bug fixed
 * [Tacotime](https://bitcointalk.org/index.php?action=profile;u=19270) - helping with figuring out certain problems and lead the bounty for this project's creation
 * [fancoder](https://github.com/fancoder/) - See his repo for the changes
-* [TurtleCoin](https://github.com/turtlecoin/) - For making this great again
+
 
 License
 -------
