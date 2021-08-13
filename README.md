@@ -397,16 +397,16 @@ Variable explanations:
 ```javascript
 
 /* Must point to the API setup in your config.json file. */
-var api = "http://poolhost:8117";
+var api = 'http://mining.moncoin.io:8117'
 
 /* Pool server host to instruct your miners to point to.  */
-var poolHost = "poolhost.com";
+var poolHost = "mining.moncoin.io";
 
 /* IRC Server and room used for embedded KiwiIRC chat. */
 var irc = "irc.freenode.net/#forknote";
 
 /* Contact email address. */
-var email = "support@poolhost.com";
+var email = "support@moncoin.io";
 
 /* Market stat display params from https://www.cryptonator.com/widget */
 var cryptonatorWidget = ["DSH-BTC", "DSH-USD", "DSH-EUR"];
@@ -415,10 +415,10 @@ var cryptonatorWidget = ["DSH-BTC", "DSH-USD", "DSH-EUR"];
 var easyminerDownload = "https://github.com/zone117x/cryptonote-easy-miner/releases/";
 
 /* Used for front-end block links. */
-var blockchainExplorer = "http://chainradar.com/{symbol}/block/{id}";
+var blockchainExplorer = 'https://exp.moncoin.io/block.html?hash={id}'
 
 /* Used by front-end transaction links. */
-var transactionExplorer = "http://chainradar.com/{symbol}/transaction/{id}";
+var transactionExplorer = 'https://exp.moncoin.io/transaction.html?hash={id}'
 
 /* Any custom CSS theme for pool frontend */
 var themeCss = "themes/default-theme.css";
@@ -468,7 +468,7 @@ Documentation for JSON-RPC commands can be found here:
 Curl can be used to use the JSON-RPC commands from command-line. Here is an example of calling `getblockheaderbyheight` for block 100:
 
 ```bash
-curl 127.0.0.1:18081/json_rpc -d '{"method":"getblockheaderbyheight","params":{"height":100}}'
+curl 127.0.0.1:12898/json_rpc -d '{"method":"getblockheaderbyheight","params":{"height":100}}'
 ```
 
 
@@ -481,20 +481,23 @@ curl 127.0.0.1:18081/json_rpc -d '{"method":"getblockheaderbyheight","params":{"
 
 ### Configuring Blockchain Explorer
 
-You need the latest stable version of Forknote for the blockchain explorer - [forknote releases](https://github.com/forknote/forknote/releases)
-* Add the following code to the coin's config file:
+You need the latest stable version of MONCoin for the blockchain explorer - [MONCoin releases](https://github.com/Kulteam/MONCoin/releases)
+*  Launch MONCoin with command line:
 
 ```
-rpc-bind-ip=0.0.0.0
-enable-blockchain-indexes=1
-enable-cors=*
+MONCoind --enable-blockexplorer --rpc-bind-ip=0.0.0.0 --rpc-bind-port=12898
 ```
 
-* Launch forknoted with the corresponding config file
+* Launch mon-service with command line:
+
+```
+mon-service --rpc-password "your_rpc_pasword" --container-file "file_name.wallet" --container-password "your_wallet_password" --daemon-address sv3.moncoin.io --daemon-port 12898
+```
+
 * Change the following line in the pool's frontend config.js:
 
 ```
-var api_blockexplorer = "http://daemonhost.com:1118";
+var api_blockexplorer = 'http://node-asian.moncoin.io:80'
 ```
 
 * Finally, edit these variables in the pool's frontend config.js using this syntax:
@@ -514,6 +517,7 @@ Credits
 * [Wolf0](https://bitcointalk.org/index.php?action=profile;u=80740) - Helped try to deobfuscate some of the daemon code for getting a bug fixed
 * [Tacotime](https://bitcointalk.org/index.php?action=profile;u=19270) - helping with figuring out certain problems and lead the bounty for this project's creation
 * [fancoder](https://github.com/fancoder/) - See his repo for the changes
+* [Kulteam](https://github.com/Kulteam/) - See his repo for the changes
 
 
 License
